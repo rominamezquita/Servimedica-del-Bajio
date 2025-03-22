@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SERVI MEDICA</title>
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            padding: 0;
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+
+        section {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        header {
+            background: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 40px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        header img {
+            height: 50px;
+        }
+
+        header nav {
+            display: flex;
+            gap: 20px;
+        }
+
+        header nav a {
+            color: #39689e;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: color 0.3s ease;
+        }
+
+        header nav a:hover {
+            color: #66a3ff;
+        }
+
+        header nav a.active {
+            background-color: #39689e;
+            color: white;
+            padding: 10px 15px;
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            margin-left: 15px;
+	    margin-right: 50px;
+        }
+
+        .search-bar {
+            position: relative;
+            display: flex;
+            align-items: center;
+            margin-left: 15px;
+            margin-right: 50px;
+        }
+
+        .search-bar input[type="text"] {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 15px;
+            font-size: 14px;
+        }
+
+        .search-bar button {
+            background-color: #39689e;
+            color: white;
+            border: none;
+            padding: 8px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 5px;
+        }
+
+        .search-bar button:hover {
+            background-color: #5485cf;
+        }
+
+        .autocomplete-suggestions {
+            position: absolute;
+            top: 40px;
+            left: 0;
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 100%;
+            max-height: 150px;
+            overflow-y: auto;
+            z-index: 1000;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+       .autocomplete-suggestions div {
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        .autocomplete-suggestions div:hover {
+            background-color: #f0f0f0;
+        }
+
+        .equipment-section {
+            background: url('Agregar%20un%20t%C3%ADtulo.png') no-repeat center center/cover;
+            color: white;
+            text-align: center;
+            text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5);
+            padding: 100px 20px;
+            height: 70vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .equipment-section h2 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+
+        .equipment-section p {
+            font-size: 1.5rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+ .section-title {
+            margin: 100px 20px 40px;
+            text-align: center;
+            font-size: 3rem;
+            color: #39689e;
+        }
+
+        /* Políticas Section */
+        .politicas-container {
+            display: flex;
+            justify-content: justify;
+            align-items: flex-start;
+            gap: 60px;
+            padding: 40px;
+            background-color: #f9f9f9;
+        }
+
+        .politicas-text {
+            flex: 1;
+            max-width: 600px;
+        }
+
+        .politicas-text h2 {
+            color: #39689e;
+            font-size: 2.5rem;
+            margin-bottom: 35px;
+        }
+
+        .politicas-text p {
+            font-size: 1.1rem;
+            color: #555;
+            line-height: 1.8;
+        }
+
+        .politicas-box {
+            flex: 1;
+            background: #39689e;
+            color: white;
+            padding: 20px 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .politicas-box h3 {
+            font-size: 1.5rem;
+            margin-bottom: 40px;
+        }
+
+        .politicas-box ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .politicas-box li {
+            display: flex;
+            align-items: center;
+            margin-bottom: 45px;
+        }
+
+        .politicas-box li::before {
+            content: '✔';
+            margin-right: 10px;
+            color: #4dff4d;
+            font-weight: bold;
+        }
+
+        .soluciones-section {
+            text-align: center;
+            padding: 50px 20px;
+            background: white;
+        }
+
+        .soluciones-section h2 {
+            font-size: 3rem;
+            color: #39689e;
+            margin-bottom: 10px;
+        }
+
+        .soluciones-section p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            color: #555;
+        }
+
+        .card-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .card {
+            position: relative;
+            width: 420px;
+            height: 350px;
+            overflow: hidden;
+            border-radius: 0px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transform: translateY(0px);
+	  
+            opacity: 1;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+            cursor: pointer;
+            background: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card:hover {
+            transform: scale(1.06);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .card:active {
+            background-color: rgba(0, 0, 0, 0.5);
+            transition: background-color 0.2s ease;
+        }
+
+        .card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .card-content {
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0.35);
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            font-weight: bold;
+            position: absolute;
+            bottom: 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+            font-size: 18px;
+        }
+
+        #contacto {
+            padding: 50px 20px;
+            background: #f4f4f4;
+        }
+
+        #contacto .map {
+            width: 100%;
+            height: 400px;
+            border: 0;
+        }
+
+        .contact-container {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            padding: 20px;
+        }
+
+        .contact-info {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .contact-form {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        form label {
+            display: block;
+            margin-top: 10px;
+        }
+
+        form input,
+        form textarea,
+        form button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+        }
+
+        footer {
+            background: #39689e;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            margin-top: 20px;
+        }
+
+        main {
+            margin-top: 100px;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <img src="logoo.png" alt="Logo">
+        <nav>
+            <a href="#inicio" class="active">Inicio</a>
+            <a href="#soluciones">Productos</a>
+            <a href="#politicas">Politicas</a>
+            <a href="#contacto">Contacto</a>
+        </nav>
+        <div class="search-bar">
+            <input type="text" id="search-input" placeholder="Buscar...">
+            <button onclick="performSearch()">Buscar</button>
+        </div>
+    </header>
+
+    <main>
+        <section id="inicio" class="equipment-section">
+            <h2>SERVI MEDICA DEL BAJIO S.A. DE C.V.</h2>
+            <p>Somos más que un proveedor de implantes para todos los procedimientos quirúrgicos. El cirujano puede contar con nuestro sistema de apoyo generalmente no disponible en los hospitales.</p>
+        </section>
+
+        <section id="soluciones" class="soluciones-section">
+            <h2>Nuestras Soluciones</h2>
+            <p>Conozca la amplia gama de soluciones para cirugías</p>
+            <div class="card-container">
+                <div class="card" onclick="window.location.href='osteosintesis1.html'">
+                    <img src="trauma_osteosintesis.jpg" alt="Trauma y Osteosíntesis">
+                    <div class="card-content">Material de Trauma y Osteosíntesis</div>
+                </div>
+                <div class="card" onclick="window.location.href='columna_cirugia.html'">
+                    <img src="columna_cirugia.jpg" alt="Cirugía Columna">
+                    <div class="card-content">Soluciones para Cirugía de Columna</div>
+                </div>
+                <div class="card" onclick="window.location.href='endoprotesis_avanzada.html'">
+                    <img src="endoprotesis.jpg" alt="Endoprótesis Avanzada">
+                    <div class="card-content">Endoprótesis avanzada</div>
+                </div>
+                <div class="card" onclick="window.location.href='antroscopia_integral.html'">
+                    <img src="antroscopia_integral.jpg" alt="Antroscopia Integral">
+                    <div class="card-content">Antroscopia Integral</div>
+                </div>
+                <div class="card" onclick="window.location.href='cirugia_neurofuncional.html'">
+                    <img src="neurofuncional.jpg" alt="Cirugía Neurofuncional">
+                    <div class="card-content">Cirugía Neurofuncional</div>
+                </div>
+                <div class="card" onclick="window.location.href='complementos.html'">
+                    <img src="complementos.jpg" alt="Complementos">
+                    <div class="card-content">Complementos</div>
+                </div>
+            </div>
+        </section>
+
+    <section id="politicas">
+        <h2 class="section-title">Políticas de Calidad</h2>
+        <div class="politicas-container">
+            <div class="politicas-text">
+                <h2>Nuestro Objetivo</h2>
+                <p><strong>Satisfacción total a nuestros clientes.</strong></p>
+                <p>Fieles a nuestro objetivo principal de "Satisfacción Total a nuestros Clientes" y a la superación de sus expectativas, determinamos nuestra Política de Calidad.</p>
+                <p>Traumaservice Internacional S.A. de C.V. es una empresa dedicada a proveer implantes de alta calidad y tecnología avanzada, así como el mejor servicio en apoyo quirúrgico.</p>
+                <p>Nuestra característica es la calidad en el servicio, superando las expectativas a través de medidas y acciones innovadoras que garantizan la mejor atención.</p>
+            </div>
+            <div class="politicas-box">
+                <h3>Algunas de nuestras políticas:</h3>
+                <ul>
+                    <li>Atención personalizada las 24 horas del día, los 7 días de la semana.</li>
+                    <li>Acompañamiento de nuestros implantes con material e instrumental específico.</li>
+                    <li>Protección radiológica para el equipo quirúrgico.</li>
+                    <li>Acompañamiento de cada procedimiento con un Asesor Técnico Quirúrgico.</li>
+                    <li>Comunicación constante con nuestros clientes.</li>
+                    <li>Proveedores certificados en Calidad con amplia trayectoria.</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+
+
+        <section id="contacto">
+            <iframe class="map" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3733.947415258541!2d-102.3116356850783!3d21.878987985539176!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8429ed63d45ec4e9%3A0x58e318df2c6b4d26!2sRep%C3%BAblica%20de%20Uruguay%20912%2C%20Las%20Am%C3%A9ricas%2C%2020230%20Aguascalientes%2C%20Ags.!5e0!3m2!1ses-419!2smx!4v1700000000000!5m2!1ses-419!2smx" allowfullscreen="" loading="lazy"></iframe>
+
+            <div class="contact-container">
+                <div class="contact-info">
+                    <h2>Contacto</h2>
+                    <p><strong>SERVI MEDICA DEL BAJIO</strong></p>
+                    <p>República de Uruguay # 912<br>Aguascalientes, Ags<br>C.P. 20230</p>
+                    <p>
+                        Teléfono: (449) 993-29-02<br>
+                        Teléfono adicional: 449 769 4725 <br>
+                        Email: <a href="mailto:almacenags@servimedica.com.mx">almacenags@servimedica.com.mx</a>
+                    </p>
+                </div>
+
+                <div class="contact-form">
+                    <form action="/send-message" method="POST">
+                        <label for="nombre">Nombre:</label>
+                        <input type="text" id="nombre" name="nombre" required>
+
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" name="email" required>
+
+                        <label for="telefono">Teléfono:</label>
+                        <input type="text" id="telefono" name="telefono">
+
+                        <label for="mensaje">Mensaje:</label>
+                        <textarea id="mensaje" name="mensaje" rows="5"></textarea>
+
+                        <button type="submit">Enviar</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2024 Servi Médica del Bajío - Todos los derechos reservados</p>
+    </footer>
+
+    <script>
+        const sections = document.querySelectorAll("section");
+        const navLinks = document.querySelectorAll("header nav a");
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add("visible");
+
+                    navLinks.forEach(link => link.classList.remove("active"));
+                    const activeLink = document.querySelector(`header nav a[href="#${entry.target.id}"]`);
+                    if (activeLink) activeLink.classList.add("active");
+                }
+            });
+        }, {
+            threshold: 0.1
+        });
+
+        sections.forEach((section) => {
+            observer.observe(section);
+        });
+
+        function performSearch() {
+            const query = document.getElementById("search-input").value.toLowerCase();
+            const cards = document.querySelectorAll(".card");
+
+            cards.forEach(card => {
+                const content = card.textContent.toLowerCase();
+                if (content.includes(query)) {
+                    card.style.display = "flex";
+                } else {
+                    card.style.display = "none";
+                }
+            });
+        }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const sections = document.querySelectorAll("section");
+        const navLinks = document.querySelectorAll("header nav a");
+
+        function updateActiveLink() {
+            let index = sections.length;
+
+            // Detectar la sección visible
+            while (--index && window.scrollY + 50 < sections[index].offsetTop) {}
+
+            // Eliminar la clase "active" de todos los links
+            navLinks.forEach((link) => link.classList.remove("active"));
+
+            // Añadir la clase "active" al link correspondiente
+            if (navLinks[index]) {
+                navLinks[index].classList.add("active");
+            }
+        }
+
+        // Ejecutar la función en eventos de scroll y al inicio
+        updateActiveLink();
+        window.addEventListener("scroll", updateActiveLink);
+
+        // Asegurar que el enlace se marque como activo al hacer clic
+        navLinks.forEach((link) => {
+            link.addEventListener("click", function () {
+                navLinks.forEach((link) => link.classList.remove("active"));
+                this.classList.add("active");
+            });
+        });
+    });
+
+    </script>
+</body>
+
+</html>
